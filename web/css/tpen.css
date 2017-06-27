@@ -518,7 +518,7 @@ td {
     width: 70px;
 }
 #projectList td:last-child {
-    width:20px;
+    width:35px;
 }
 #projectList tr td:not(:first-child) * {
     position: relative;

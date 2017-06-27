@@ -6403,7 +6403,6 @@ tpen.screen.responsiveNavigation = function(severeCheck){
         tpen.screen.navMemory = 0;
     }
     var width = Page.width();
-    var trims = $(".trimSection:visible").length;
     var contentWidth = (function(){
         var w=0;
         $('.trimSection').each(function(){
@@ -6411,9 +6410,8 @@ tpen.screen.responsiveNavigation = function(severeCheck){
         });
         return w;
     })();
-
     var addClass = (severeCheck) ? "severe" : "collapsed";
-    
+    var trims = $(".trimSection:visible").length;
     if(contentWidth>width-(trims*20)){ // margin not accounted for otherwise
         // content is encroaching and will overlap
         $('.topTrim.navigation').addClass(addClass);

@@ -480,6 +480,12 @@
                                 <%}%>
                             </li>
                             <li class="left ui-widget-content ui-corner-tr ui-corner-bl tall">
+                                <h3>IIIF</h3>
+                                <p>Your project is available as a <code>sc:Manifest</code> at
+                                    <a href='/manifest/<% out.print(projectID) ;%>'>http://t-pen.org/TPEN/manifest/<% out.print(projectID) ;%></a>.
+                                    Also:
+                                    </a>
+                                
                                 <h3>Current Metadata Summary</h3>
 <%
                                 if (thisProject.getHeader().length()>0){
