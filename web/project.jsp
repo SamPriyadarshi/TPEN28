@@ -484,6 +484,8 @@
                                 <p>Your project is available as a <code>sc:Manifest</code> at
                                     <a href='/manifest/<% out.print(projectID) ;%>'>http://t-pen.org/TPEN/manifest/<% out.print(projectID) ;%></a>.
                                     Also:
+                                    <a href='http://t-pen.org/TPEN/project.jsp?projectID=<% out.print(projectID) ;%>&manifest=http://t-pen.org/TPEN/manifest/<% out.print(projectID) ;%>'>
+                                    <img src='images/logo-iiif-34x30.png' alt='IIIF Drag and Drop'>
                                     </a>
                                 
                                 <h3>Current Metadata Summary</h3>

@@ -620,6 +620,9 @@ $(window).load(function(){gapi.plusone.go();});
                                     + "\"><td><a href=\"transcription.html?projectID=" + projectID + "&p="+ recentFolio +"\">"+ projectTitle + "</a></td>"
                                     + "<td><a href=\"transcription.html?projectID=" + projectID + "&p="+ recentFolio +"\" title='Resume Transcribing' class='left'><span class='ui-icon ui-icon-pencil left'></span>Resume</a></td>"
                                     + "<td><a href=\"project.jsp?projectID=" + projectID + "\" title='Manage this Project' class='left'><span class='ui-icon ui-icon-gear left'></span>Manage</a></td>"
+                                    + "<td><a href='#' onclick='$(\"#rearrangeProjects\").click();return false;' title='Reorder this List'><span class='ui-icon ui-icon-shuffle left'></span></a>"
+                                    + "<a href='http://t-pen.org/TPEN/project.jsp?projectID=" + projectID + "&manifest=http://t-pen.org/TPEN/manifest/" + projectID + "'>"
+                                    + "<img src='images/iiif-logo-16.png' alt='IIIF Drag and Drop'></a></td>");
                         }
                         %> 
                         </tbody>
