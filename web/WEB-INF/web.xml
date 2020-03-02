@@ -235,6 +235,14 @@
         <servlet-name>UpgradeManagement</servlet-name>
         <servlet-class>edu.slu.tpen.servlet.UpgradeManagement</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ClassicProjectFromManifest</servlet-name>
+        <servlet-class>edu.slu.tpen.servlet.ClassicProjectFromManifest</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>autoParse</servlet-name>
+        <servlet-class>edu.slu.tpen.servlet.AutoParse</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>imageResize</servlet-name>
         <url-pattern>/imageResize</url-pattern>
@@ -406,11 +414,15 @@
     </servlet>
     <servlet>
         <servlet-name>createProjectFromMSID</servlet-name>
-        <servlet-class>edu.slu.tpen.servlet.CreateProjectClassic</servlet-class>
+        <servlet-class>edu.slu.tpen.servlet.CreateProjectFromMSIDServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>createProject</servlet-name>
         <servlet-class>edu.slu.tpen.servlet.CreateProjectClassic</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>createProjectFromManifest</servlet-name>
+        <servlet-class>edu.slu.tpen.servlet.CreateProjectServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>copyProject</servlet-name>
@@ -520,6 +532,10 @@
     <servlet-mapping>
         <servlet-name>createProject</servlet-name>
         <url-pattern>/createProject</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>createProjectFromManifest</servlet-name>
+        <url-pattern>/createProjectFromManifest</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>createProjectFromMSID</servlet-name>
@@ -665,6 +681,14 @@
     <servlet-mapping>
         <servlet-name>UpgradeManagement</servlet-name>
         <url-pattern>/upgradeManagement</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClassicProjectFromManifest</servlet-name>
+        <url-pattern>/ClassicProjectFromManifest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>autoParse</servlet-name>
+        <url-pattern>/autoParse</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>720</session-timeout>

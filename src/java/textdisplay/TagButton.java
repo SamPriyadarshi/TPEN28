@@ -132,7 +132,7 @@ public class TagButton {
          TagButton t = new TagButton(projectID, position, true);
          t.deleteTag();
       } catch (Exception e) {
-         LOG.log(Level.SEVERE, null, e);
+         Logger.getLogger(TagButton.class.getName()).log(Level.SEVERE, null, e);
       }
       try {
          String query = "insert into projectbuttons(project,position,text,description) values (?,?,?,?)";
@@ -151,7 +151,7 @@ public class TagButton {
          this.projectID = projectID;
          this.xmlColor = "";
       } catch (Exception e) {
-         LOG.log(Level.SEVERE, null, e);
+         Logger.getLogger(TagButton.class.getName()).log(Level.SEVERE, null, e);
       } finally {
          DatabaseWrapper.closeDBConnection(j);
          DatabaseWrapper.closePreparedStatement(stmt);
@@ -204,7 +204,7 @@ public class TagButton {
             TagButton t = new TagButton(projectID, position, true);
             t.deleteTag();
          } catch (Exception e) {
-            LOG.log(Level.SEVERE, null, e);
+            Logger.getLogger(TagButton.class.getName()).log(Level.SEVERE, null, e);
          }
          for (int i = 0; i < params.length; i++) {
             if (params[i] == null || params[i].contains("null")) {
@@ -521,7 +521,7 @@ public class TagButton {
          }
       }
       if (!caller) {
-         LOG.log(Level.SEVERE, "{0} Running tagButton.getAllProjectButtonsClassic\n{1}", new Object[]{formatter.format(date), stackTrace});
+         //LOG.log(Level.SEVERE, "{0} Running tagButton.getAllProjectButtonsClassic\n{1}", new Object[]{formatter.format(date), stackTrace});
       }
       return "<span class=\"lookLikeButtons\" title=\"" + getFullTag() + "\" onclick=\"Interaction.insertTag('" + tag + "', '" + getFullTag() + "');\">" + getDescription() + "</span>";
    }
@@ -535,7 +535,7 @@ public class TagButton {
             tagCpy = tagCpy.replace("&nbsp;/", "");
             tagCpy = tagCpy.replace(" /", "");
         }
-        System.out.println("Now that tag is "+tagCpy);
+        //System.out.println("Now that tag is "+tagCpy);
         String toret = "<" + tagCpy;
         if (parameters != null && parameters.length == 5) {
             if (parameters[0] != null) {
@@ -559,7 +559,7 @@ public class TagButton {
             else{
                toret += " />"; 
             }
-            System.out.println("Return "+toret);
+            //System.out.println("Return "+toret);
             return toret;
         } 
         else {
@@ -595,7 +595,7 @@ public class TagButton {
          stackTrace += t[i].toString() + "\n";
       }
 
-      LOG.log(Level.SEVERE, "{0} Running tagButton.getAllProjectButtonsClassic\n{1}", new Object[]{formatter.format(date), stackTrace});
+      //LOG.log(Level.SEVERE, "{0} Running tagButton.getAllProjectButtonsClassic\n{1}", new Object[]{formatter.format(date), stackTrace});
       Connection j = null;
       PreparedStatement stmt = null;
       try {
@@ -610,7 +610,7 @@ public class TagButton {
             int position = rs.getInt("position");
             try {
                TagButton b = new TagButton(projectID, position, true);
-               System.out.println("Get all project buttons classic.  What is button "+b.getButton());
+               //System.out.println("Get all project buttons classic.  What is button "+b.getButton());
                toret += b.getButton();
             } catch (NullPointerException e) {
             }
@@ -642,7 +642,7 @@ public class TagButton {
       for (int i = 0; i < t.length; i++) {
          stackTrace += t[i].toString() + "\n";
       }
-      LOG.log(Level.SEVERE, "{0} Running tagButton.getAllProjectButtons\n{1}", new Object[]{formatter.format(date), stackTrace});
+      //LOG.log(Level.SEVERE, "{0} Running tagButton.getAllProjectButtons\n{1}", new Object[]{formatter.format(date), stackTrace});
       Connection j = null;
       PreparedStatement stmt = null;
       try {
@@ -664,7 +664,7 @@ public class TagButton {
                 buttonHTML = "";
                 int position = rs.getInt("position");
                 TagButton b = new TagButton(projectID, position, true);
-                System.out.println("Build all project XML.  What is b.getTag()..."+b.getTag());
+                //System.out.println("Build all project XML.  What is b.getTag()..."+b.getTag());
                 buttonHTML += "<li class=\"ui-state-default xmlPanel\">";
                 buttonHTML += "<span class='ui-icon ui-icon-arrow-4 toggleXML left'></span>";
                 buttonHTML += "<a class=\"ui-icon ui-icon-closethick right\" onclick=\"deleteTag(" + position + ");\">delete</a>";
@@ -729,7 +729,7 @@ public class TagButton {
     * get all of the buttons for this Project
     */
    public static String getAllProjectButtons(int projectID) throws SQLException {
-       System.out.println("Get all project buttons");
+       //System.out.println("Get all project buttons");
       Date date = new Date(System.currentTimeMillis());
       StackTraceElement[] t = Thread.currentThread().getStackTrace();
       DateFormat formatter = new SimpleDateFormat("yyyy-mm-dd H:M:S");
@@ -765,7 +765,7 @@ public class TagButton {
                 ctr++;
                 JSONObject jo = new JSONObject();
                 if(null != b.getTag() && !"".equals(b.getTag())){
-                    System.out.println("New get all project buttons.  What is tag "+b.getTag());
+                    //System.out.println("New get all project buttons.  What is tag "+b.getTag());
                     jo.element("tag", b.getTag()); //b.getButton()
                 }
                 else{
@@ -783,7 +783,7 @@ public class TagButton {
                 else{
                     jo.element("description","");
                 }
-                System.out.println("New get project buttons.  What is full tag?   "+b.getFullTag());
+                //System.out.println("New get project buttons.  What is full tag?   "+b.getFullTag());
                 if(null != b.getFullTag()&& !"".equals(b.getFullTag())){
                     jo.element("fullTag", b.getFullTag());
                 }

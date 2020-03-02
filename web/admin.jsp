@@ -30,7 +30,25 @@
         <script type="text/javascript" src="js/manuscriptFilters.js"></script>  
         <style type="text/css">
             #userAccount, #ms, #manageUsers, #options, #about, #reportsTab { margin: 0; padding: 0;}
-            #reportsTab li,#userAccount li, #manageUsers li, #ms li, #options li, #about li { margin: 0 4px 3px 3px; padding: 0.4em; padding-left: 1.5em; height: 100%;overflow: hidden; float:left; width:29%; position: relative;}
+            #updateManagement li, #reportsTab li,#userAccount li, #manageUsers li, #ms li, #options li, #about li { margin: 0 4px 3px 3px; padding: 0.4em; padding-left: 1.5em; height: 100%;overflow: hidden; float:left; width:29%; position: relative;}
+            #updateManagement li{
+                width: 87%;
+            }
+            #updateManagement input[type="text"]{
+                width: 50%;
+                margin: 3px 0px;
+                padding: 3px;
+            }
+            #updateManagement .tpenButton{
+                padding: 4px;
+                margin-top: 8px;
+            }
+            #schedmaintenance, #countdown{
+                color: green;
+            }
+            #upgradeMessage{
+                color: blue;
+            }
             #manageUsers li {max-height: 350px;overflow: auto;}
             #tabs-3 {padding-bottom: 120px;}
             #ms li {width:98% !important; height:auto !important;}
@@ -242,8 +260,9 @@
                         <%if (thisUser.isAdmin()) { //hiding non-Admin tab%>
                         <li><a title="Manage Users" href="#tabs-3">Manage Users</a><div id="userAlert" class='ui-icon-alert ui-icon right' style="display:none;margin: 8px 8px 0 0;"></div></li>
                         <li><a title="Reports" href="#reportsTab">Reports</a></li>
+                        <li><a title="Update Maintenance Message" href="#updateTab">Maintenance Message</a></li>
                         <%}%>
-                        <li><a title="Update T-PEN" href="#updateTab">Manage Upgrade</a></li>
+                        
                         <li><a title="About the T&#8209;PEN project" href="#aboutTab">About T&#8209;PEN</a></li>
                     </ul>
                     <div id="tabs-1">
@@ -611,7 +630,7 @@
                                                     }
                                                 }
                                             }
-                                            String[] cities = Manuscript.getAllCities();
+                                            String[] cities = textdisplay.Manuscript.getAllCities();
                                             for (int i = 0; i < cities.length; i++) {
                                                 CityMap thisCity = new CityMap(cities[i]);
                                                 String mapped = thisCity.getValue();
@@ -796,7 +815,7 @@
                                     <span>Date and time (yyyy-mm-dd hh:mm:ss) : </span><input type="text" name="upgradeDate" placeholder="Date and time upgrade will take place"><br>
                                     <span>Message to display to the user: </span><input type="text" name="upgradeMessage" placeholder="Custom message for the user"><br>
                                     <span>Check to include a countdown: </span><input type="checkbox" name="updateTimer" ><br>
-                                    <input type="button" value="Set Update Settings" onclick="setUpgrade();">
+                                    <input class="tpenButton" type="button" value="Set Update Settings" onclick="setUpgrade();">
                                 </div>
                             </li>
                             <li class="gui-tab-section">
@@ -814,7 +833,7 @@
                                     
                                 </span> 
                                 <br>
-                                <input type="button" value="Remove Update Settings" onclick="removeUpgrade();">
+                                <input class="tpenButton" type="button" value="Remove Update Settings" onclick="removeUpgrade();">
                             </li>
                         </ul>
                     </div>
@@ -827,22 +846,7 @@
                                 </p>
                             </li>
                             <li id="contactForm" class="gui-tab-section">
-                                <h3>More T&#8209;PEN</h3>
-                                    <div id='sharing'>
-                    <a id="shareFacebook" class="share" 
-                       href="http://www.facebook.com/pages/The-T-Pen-project/155508371151230"
-                       sharehref="http://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.t-pen.org"
-                       target="_blank">
-                        <img alt="facebook"
-                             src="images/sharing/facebook.png"/>
-                    </a>
-                    <a id="shareYoutube" class="share" 
-                       href="http://www.youtube.com/user/tpentool"
-                       target="_blank">
-                        <img alt="youtube"
-                             src="images/sharing/youtube-128.png"/>
-                    </a>
-                </div>
+                                <h3>Contact Us</h3>
                                 <div>
 <!--                                    <div class="tpenButton contact">Directed Communication</div>
                                     <div class="contactDiv" style="display:block;">
@@ -868,7 +872,6 @@
                                             <input type="submit" value="Submit" />
                                         </form>
                                     </div>-->
-                                    <h4>Contact Us</h4>
                                     <div>
                                         <%
                                             if (request.getParameter("contactTPEN") != null) {
@@ -1079,8 +1082,8 @@
             <div class="callup" id="form"> <!-- add to project -->
                 <span id="closePopup" class="right caps">close<a class="right ui-icon ui-icon-closethick" title="Close this window">cancel</a></span>
                 <%    //Attach arrays of AllCities and AllRepositories represented on T&#8209;PEN
-                    String[] cities = Manuscript.getAllCities();
-                    String[] repositories = Manuscript.getAllRepositories();
+                    String[] cities = textdisplay.Manuscript.getAllCities();
+                    String[] repositories = textdisplay.Manuscript.getAllRepositories();
                 %>
                 <label class="left" for="cities">City: </label>
                 <select class="left" name="cities" onchange="Manuscript.filteredCity();scrubListings();" id="cities">
@@ -1141,7 +1144,7 @@
                 $.post(url, params)
                     .done(function(data){
                         if(data === "date parse error"){
-                            alert("Bad date syntax");
+                            alert("Bad date syntax.");
                         }
                         else{
                              maintenanceDate();  
@@ -1166,15 +1169,21 @@
                     .done(function(data){
                         var managerData = JSON.parse(data);
                         var mdate = managerData.upgradeDate;
-                        var dateForUser = new Date(mdate);
                         var message = managerData.upgradeMessage;
                         var countdown = managerData.countdown;
-                        
+                        var options = {  
+                            weekday: "long", year: "numeric", month: "short",  
+                            day: "numeric", hour: "2-digit", minute: "2-digit"  
+                        };  
+                        var dateForUser = new Date(mdate);
                         if(managerData.active > 0){
                             $("#upgradeMessage").html(message);
-                            $("#schedmaintenance").html(dateForUser.format('l, F jS, Y g:00a'));
+                            $("#schedmaintenance").html(dateForUser.toLocaleTimeString("en-us", options)); //.format('l, F jS, Y g:00a')
                             if(countdown > 0){
                                 setCountdown(mdate);
+                            }
+                            else{
+                                $("#countdown").html("");
                             }
                             //return(dateForUser.format('l, F jS, Y g:00a'));
                         }

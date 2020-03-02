@@ -287,13 +287,16 @@
                     .done(function(data){
                         var managerData = JSON.parse(data);
                         var mdate = managerData.upgradeDate;
-                        var dateForUser = new Date(mdate);
                         var message = managerData.upgradeMessage;
                         var countdown = managerData.countdown;
-                        
+                        var options = {  
+                            weekday: "long", year: "numeric", month: "short",  
+                            day: "numeric", hour: "2-digit", minute: "2-digit"  
+                        };  
+                        var dateForUser = new Date(mdate);
                         if(managerData.active > 0){
                             $("#upgradeMessage").html(message);
-                            $("#schedmaintenance").html(dateForUser.format('l, F jS, Y g:00a'));
+                            $("#schedmaintenance").html(dateForUser.toLocaleTimeString("en-us", options));
                             if(countdown > 0){
                                 setCountdown(mdate);
                             }
@@ -307,7 +310,7 @@
                             // set to 8am Central Time
                             today.setHours(14 - today.getTimezoneOffset()/60);
                             //return(today.format('l, F jS, Y g:00a'));
-                            $("#schedmaintenance").html(today.format('l, F jS, Y g:00a'));
+                            $("#schedmaintenance").html(today.toLocaleTimeString("en-us", options));
                         }
                     });
             }
@@ -503,7 +506,7 @@ $(window).load(function(){gapi.plusone.go();});
                     <%}%>    
                 <div id='sharing'>
                     <a id="videoBtn" class="share" title="See help video!" onclick="openHelpVideo('http://www.youtube.com/embed/0S5ilvLM9fw');"><img class="videoShare" src="../TPEN/images/helpinvert.png"/></a>                    
-                    <a id="shareFacebook" class="share" 
+                    <!-- <a id="shareFacebook" class="share" 
                        href="http://www.facebook.com/pages/The-T-Pen-project/155508371151230"
                        sharehref="http://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.t-pen.org"
                        target="_blank">
@@ -515,7 +518,7 @@ $(window).load(function(){gapi.plusone.go();});
                        target="_blank">
                         <img alt="youtube"
                              src="images/sharing/youtube-128.png"/>
-                    </a>
+                    </a> -->
                 </div>
             </div>
             <div id="tabs" style="padding-bottom: 3em;">
@@ -538,8 +541,8 @@ $(window).load(function(){gapi.plusone.go();});
                 </ul>
                 <div id="manuscripts">
                     <%
-                    String [] allCities = Manuscript.getAllCities();
-                    String [] allRepositories = Manuscript.getAllRepositories();
+                    String [] allCities = textdisplay.Manuscript.getAllCities();
+                    String [] allRepositories = textdisplay.Manuscript.getAllRepositories();
                     %>
                     <div id="cityMS">
                         <h3>Available Cities</h3>
@@ -633,6 +636,7 @@ $(window).load(function(){gapi.plusone.go();});
                         }
                    } catch (SQLException err) {
                     out.print("<p class=ui-state-error-text>Error retreiving list of projects.</p>");
+                    out.print(err.toString());
                    }%>
                 </div>
                 <div id="publicProjects">
@@ -1206,8 +1210,8 @@ $(window).load(function(){gapi.plusone.go();});
             <div class="callup" id="browseMSPanel"> <!-- select -->
                 <span id="closePopup" class="tpenButton right" title="Close this window">close<span class="ui-icon ui-icon-closethick right"></span></span>
                 <%    //Attach arrays of AllCities and AllRepositories represented on T&#8209;PEN
-                    String[] cities = Manuscript.getAllCities();
-                    String[] repositories = Manuscript.getAllRepositories();
+                    String[] cities = textdisplay.Manuscript.getAllCities();
+                    String[] repositories = textdisplay.Manuscript.getAllRepositories();
                     if (thisUser == null) {
                 %>
                 <script type="text/javascript">

@@ -6,8 +6,7 @@
 
 package edu.slu.tpen.entity.Image;
 
-import static com.hp.hpl.jena.assembler.Assembler.connection;
-import static com.hp.hpl.jena.vocabulary.TestManifest.result;
+
 import edu.slu.tpen.servlet.Constant;
 import static edu.slu.util.LangUtils.buildQuickMap;
 import java.io.BufferedReader;
@@ -20,15 +19,15 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import org.owasp.esapi.ESAPI;
-import textdisplay.Annotation;
 import textdisplay.Folio;
 import textdisplay.Transcription;
 
@@ -169,8 +168,7 @@ public class Canvas {
      * @return : The annotation lists @id property, not the object.  Meant to look like an otherContent field.
      */
     public static JSONArray getLinesForProject(Integer projectID, String canvasID, Integer folioNumber, Integer UID) throws MalformedURLException, IOException, SQLException {
-        System.out.println("Get lines for project");
-        JSONObject parameter = new JSONObject();
+        //System.out.println("Get lines for project");
         JSONObject annotationList = new JSONObject();
         JSONArray resources_array = new JSONArray();
         String dateString = "";
@@ -183,16 +181,11 @@ public class Canvas {
         annotationList.element("@context", "http://iiif.io/api/presentation/2/context.json");
         //annotationList.element("testing", "msid_creation");
         Transcription[] lines;
-        parameter.element("@type", "sc:AnnotationList");
-        if(projectID > -1){
-            parameter.element("proj", projectID);
-        }
-        parameter.element("on", canvasID);
-        lines = Transcription.getProjectTranscriptions(projectID, folioNumber);
+        lines = Transcription.getProjectTranscriptions(projectID, folioNumber); //Can return an empty array now.
         int numberOfLines = lines.length;
         List<Object> resources = new ArrayList<>();
         //System.out.println("How many lines?   "+numberOfLines);
-        for (int i = 0; i < numberOfLines; i++) {
+        for (int i = 0; i < numberOfLines; i++) { //numberOfLines can be 0 now.
             if (lines[i] != null) {   
                 //System.out.println("On line "+i);
                 dateString = "";
@@ -229,10 +222,11 @@ public class Canvas {
                 resources.add(lineAnnot);
             }
             else{
+                Logger.getLogger(Canvas.class.getName()).log(Level.INFO, null, "Lines for list was null");
                 System.out.println("lines was null");
             }
         }
-        resources_array = JSONArray.fromObject(resources);
+        resources_array = JSONArray.fromObject(resources); //This can be an empty array now.
 //            String newListID = Annotation.saveNewAnnotationList(annotationList);
 //            annotationList.element("@id", newListID);
         annotationList.element("resources", resources_array);
@@ -280,7 +274,16 @@ public class Canvas {
         reader.close();
         connection.disconnect();
         //FIXME: Every now and then, this line throws an error: A JSONArray text must start with '[' at character 1 of &lt
-        JSONArray theLists = JSONArray.fromObject(sb.toString());
+        JSONArray theLists = null;
+        try{
+           theLists = JSONArray.fromObject(sb.toString());
+        }
+        catch(JSONException e){
+            Logger.getLogger(Canvas.class.getName()).log(Level.INFO, null, e);
+            throw e;
+           // System.out.println("Batch save response does not contain JSONARRAY in new_resouces.");
+        }
+        
         //System.out.println("Found "+theLists.size()+" lists matching those params.");
         String[] annotationLists = new String[theLists.size()];
         for(int i=0; i<theLists.size(); i++){
@@ -337,6 +340,8 @@ public class Canvas {
             new_resources = (JSONArray) batchSaveResponse.get("new_resources");
         }
         catch(JSONException e){
+            Logger.getLogger(Canvas.class.getName()).log(Level.INFO, null, e);
+            throw e;
            // System.out.println("Batch save response does not contain JSONARRAY in new_resouces.");
         }
         
@@ -387,6 +392,8 @@ public class Canvas {
         }
         catch(JSONException e){
            // System.out.println("Batch save response does not contain JSONARRAY in new_resouces.");
+            Logger.getLogger(Canvas.class.getName()).log(Level.INFO, null, e);
+            throw e;
         }
         return new_resources;
     }

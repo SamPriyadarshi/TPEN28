@@ -55,7 +55,6 @@ public class UpdateLineServlet extends HttpServlet {
         //System.out.println("The back says we should update a line's content");
         try {
             if (request.getParameter("text") == null) {
-
                 response.sendError(response.SC_BAD_REQUEST);
                 response.setHeader("Access-Control-Allow-Origin", "*");
                 return;
@@ -69,7 +68,7 @@ public class UpdateLineServlet extends HttpServlet {
             HttpSession session = request.getSession();
 
             if (session.getAttribute("UID") == null ||request.getParameter("projectID") == null) {
-                response.sendError(response.SC_FORBIDDEN);
+                response.sendError(response.SC_UNAUTHORIZED);
                 response.setHeader("Access-Control-Allow-Origin", "*");
                return;
             }
@@ -103,12 +102,12 @@ public class UpdateLineServlet extends HttpServlet {
                         out.print(ESAPI.encoder().decodeForHTML(new Transcription(line).getText() +","+ new Transcription(line).getComment()));
                         return;
                     } else {
-                        response.sendError(response.SC_FORBIDDEN);
+                        response.sendError(response.SC_UNAUTHORIZED);
                         response.setHeader("Access-Control-Allow-Origin", "*");
                         return;
                     }
                 } catch (SQLException ex) {
-                    //Logger.getLogger(UpdateLine.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(UpdateLineServlet.class.getName()).log(Level.SEVERE, null, ex);
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                     response.setHeader("Access-Control-Allow-Origin", "*");
                 }
@@ -132,11 +131,12 @@ public class UpdateLineServlet extends HttpServlet {
 
 
             out.print("failure");
-
+            out.close();
 
         } finally {
             out.close();
         }
+        out.close();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
